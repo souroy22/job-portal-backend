@@ -6,6 +6,7 @@ import { Job } from "../models/Job.model";
 import { paginate } from "../utils/pagination.util";
 import { Application } from "../models/Application.model";
 import { JobSeekerProfile } from "../models/JobSeeker.model";
+import User from "../models/User.model";
 
 const jobController = {
   createJob: catchAsync(async (req: Request, res: Response) => {
@@ -153,10 +154,17 @@ const jobController = {
         applicant: req.user.user.id,
         jobId,
       }).select("status");
+      const recruiterDetails = await User.findById(jobData.postedBy);
       data["applicationStatus"] = applicationStatus
         ? applicationStatus.status
         : "Not Applied";
       data["recruiterId"] = jobData.postedBy;
+      if (recruiterDetails) {
+        data["recruiterDetails"] = {
+          name: recruiterDetails.name,
+          email: recruiterDetails.email,
+        };
+      }
     } else {
       const applicants = [];
       for (let candidate of appliedCandidates) {

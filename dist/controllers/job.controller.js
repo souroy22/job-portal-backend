@@ -19,6 +19,7 @@ const Job_model_1 = require("../models/Job.model");
 const pagination_util_1 = require("../utils/pagination.util");
 const Application_model_1 = require("../models/Application.model");
 const JobSeeker_model_1 = require("../models/JobSeeker.model");
+const User_model_1 = __importDefault(require("../models/User.model"));
 const jobController = {
     createJob: (0, catchAsync_util_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const { companySlug, title, description, location, jobType, salary, skills, } = req.body;
@@ -149,10 +150,17 @@ const jobController = {
                 applicant: req.user.user.id,
                 jobId,
             }).select("status");
+            const recruiterDetails = yield User_model_1.default.findById(jobData.postedBy);
             data["applicationStatus"] = applicationStatus
                 ? applicationStatus.status
                 : "Not Applied";
             data["recruiterId"] = jobData.postedBy;
+            if (recruiterDetails) {
+                data["recruiterDetails"] = {
+                    name: recruiterDetails.name,
+                    email: recruiterDetails.email,
+                };
+            }
         }
         else {
             const applicants = [];
