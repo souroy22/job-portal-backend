@@ -148,8 +148,16 @@ const jobController = {
       status: jobData.status,
       applied: !!appliedCandidates?.length,
     };
-    const applicants = [];
-    if (req.user.user.role === "recruiter") {
+    if (req.user.user.role === "job_seeker") {
+      const applicationStatus = await Application.findOne({
+        applicant: req.user.user.id,
+        jobId,
+      }).select("status");
+      data["applicationStatus"] = applicationStatus
+        ? applicationStatus.status
+        : "Not Applied";
+    } else {
+      const applicants = [];
       for (let candidate of appliedCandidates) {
         const applicantProfile = await JobSeekerProfile.findOne({
           userId: candidate.applicant._id,
@@ -164,8 +172,9 @@ const jobController = {
           id: candidate.applicant._id,
         });
       }
+      data["applicants"] = applicants;
     }
-    data["applicants"] = applicants;
+
     return res.status(200).json(data);
   }),
   getRecommendedJobs: catchAsync(async (req: Request, res: Response) => {
@@ -249,6 +258,28 @@ const jobController = {
       throw new AppError("No job found", 404);
     }
     return res.status(200).json({ message: "Successfully change job status" });
+  }),
+  appliedJobs: catchAsync(async (req: Request, res: Response) => {
+    const appliedJobs = await Application.find({
+      applicant: req.user.user.id,
+    });
+    const data: any = [];
+    for (let job of appliedJobs) {
+      const jobDetails: any = await Job.findById(job.jobId).populate("company");
+      data.push({
+        title: jobDetails.title,
+        description: jobDetails.description,
+        company: jobDetails.company.name,
+        location: jobDetails.location,
+        jobType: jobDetails.jobType,
+        salary: jobDetails.salary,
+        requirements: jobDetails.requirements,
+        logo: jobDetails.company.logo,
+        id: jobDetails._id,
+        applied: true,
+      });
+    }
+    return res.status(200).json(data);
   }),
 };
 

@@ -21,6 +21,12 @@ jobRouter.get(
   paginateMiddleware,
   jobController.getPostedJobs
 );
+jobRouter.get(
+  "/applied-jobs",
+  verifyToken,
+  checkJobSeeker,
+  jobController.appliedJobs
+);
 jobRouter.get("/details/:jobId", verifyToken, jobController.getJobDetails);
 jobRouter.post("/create", verifyToken, checkRecruiter, jobController.createJob);
 jobRouter.get(
