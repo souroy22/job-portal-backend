@@ -5,10 +5,10 @@ import AppError from "../utils/AppError.util";
 
 const userController = {
   getUserData: catchAsync(async (req: Request, res: Response) => {
-    const { name, email, role, finishedProfile } = req.user.user;
+    const { name, email, role, finishedProfile, id } = req.user.user;
     return res
       .status(200)
-      .json({ user: { name, email, role, finishedProfile } });
+      .json({ user: { name, email, role, finishedProfile, id } });
   }),
   updateRole: catchAsync(async (req: Request, res: Response) => {
     const { newRole } = req.body;

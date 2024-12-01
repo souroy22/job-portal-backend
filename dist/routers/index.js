@@ -11,6 +11,7 @@ const recruiter_route_1 = __importDefault(require("./recruiter.route"));
 const company_router_1 = __importDefault(require("./company.router"));
 const job_router_1 = __importDefault(require("./job.router"));
 const application_router_1 = __importDefault(require("./application.router"));
+const message_router_1 = __importDefault(require("./message.router"));
 const routers = express_1.default.Router();
 routers.use("/auth", auth_router_1.default);
 routers.use("/user", user_router_1.default);
@@ -19,5 +20,6 @@ routers.use("/profile/company", recruiter_route_1.default);
 routers.use("/company", company_router_1.default);
 routers.use("/job", job_router_1.default);
 routers.use("/application", application_router_1.default);
+routers.use("/message", message_router_1.default);
 exports.default = routers;
 //# sourceMappingURL=index.js.map

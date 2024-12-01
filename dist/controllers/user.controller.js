@@ -17,10 +17,10 @@ const User_model_1 = __importDefault(require("../models/User.model"));
 const AppError_util_1 = __importDefault(require("../utils/AppError.util"));
 const userController = {
     getUserData: (0, catchAsync_util_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const { name, email, role, finishedProfile } = req.user.user;
+        const { name, email, role, finishedProfile, id } = req.user.user;
         return res
             .status(200)
-            .json({ user: { name, email, role, finishedProfile } });
+            .json({ user: { name, email, role, finishedProfile, id } });
     })),
     updateRole: (0, catchAsync_util_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const { newRole } = req.body;

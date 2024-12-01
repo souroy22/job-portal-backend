@@ -156,6 +156,7 @@ const jobController = {
       data["applicationStatus"] = applicationStatus
         ? applicationStatus.status
         : "Not Applied";
+      data["recruiterId"] = jobData.postedBy;
     } else {
       const applicants = [];
       for (let candidate of appliedCandidates) {

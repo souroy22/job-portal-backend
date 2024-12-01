@@ -36,6 +36,7 @@ const authController = {
                 email: newUser.email,
                 role: newUser.role,
                 finishedProfile: newUser.finishedProfile,
+                id: newUser.id,
             };
             const token = yield (0, token_util_1.default)({
                 email: newUser.email,
@@ -73,6 +74,7 @@ const authController = {
             email: isExist.email,
             role: isExist.role,
             finishedProfile: isExist.finishedProfile,
+            id: isExist.id,
         };
         const token = yield (0, token_util_1.default)({ email: isExist.email, id: isExist.id });
         return res.status(200).json({

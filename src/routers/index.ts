@@ -6,6 +6,7 @@ import recruiterRouter from "./recruiter.route";
 import companyRouter from "./company.router";
 import jobRouter from "./job.router";
 import applicationRouter from "./application.router";
+import messageRouter from "./message.router";
 
 const routers = express.Router();
 
@@ -16,5 +17,6 @@ routers.use("/profile/company", recruiterRouter);
 routers.use("/company", companyRouter);
 routers.use("/job", jobRouter);
 routers.use("/application", applicationRouter);
+routers.use("/message", messageRouter);
 
 export default routers;

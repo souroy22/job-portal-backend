@@ -5,6 +5,7 @@ import User, { IUser } from "../models/User.model";
 import verifyPassword from "../utils/verifyPassword.util";
 
 type USER_RESPONSE = {
+  id: string;
   name: string;
   email: string;
   finishedProfile: boolean;
@@ -32,6 +33,7 @@ const authController = {
         email: newUser.email,
         role: newUser.role,
         finishedProfile: newUser.finishedProfile,
+        id: newUser.id,
       };
       const token = await genarateToken({
         email: newUser.email,
@@ -68,6 +70,7 @@ const authController = {
       email: isExist.email,
       role: isExist.role,
       finishedProfile: isExist.finishedProfile,
+      id: isExist.id,
     };
     const token = await genarateToken({ email: isExist.email, id: isExist.id });
     return res.status(200).json({
