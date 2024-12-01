@@ -8,6 +8,7 @@ const user_controller_1 = __importDefault(require("../controllers/user.controlle
 const verifyToken_middleware_1 = require("../middlewares/verifyToken.middleware");
 const userRouter = express_1.default.Router();
 userRouter.get("/get-user", verifyToken_middleware_1.verifyToken, user_controller_1.default.getUserData);
+userRouter.get("/profile", verifyToken_middleware_1.verifyToken, user_controller_1.default.getProfileData);
 userRouter.patch("/update-role", verifyToken_middleware_1.verifyToken, user_controller_1.default.updateRole);
 exports.default = userRouter;
 //# sourceMappingURL=user.router.js.map
