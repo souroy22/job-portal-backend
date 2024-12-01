@@ -29,5 +29,11 @@ jobRouter.get(
   checkJobSeeker,
   jobController.getRecommendedJobs
 );
+jobRouter.patch(
+  "/update/:jobId",
+  verifyToken,
+  checkRecruiter,
+  jobController.changeJobStatus
+);
 
 export default jobRouter;

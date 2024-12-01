@@ -56,7 +56,7 @@ const jobController = {
   }),
   getAllJobs: catchAsync(async (req: Request, res: Response) => {
     const { searchQuery, location, jobType } = req.query;
-    const params: any = {};
+    const params: any = { status: "open" };
     if (searchQuery?.toString().trim()) {
       params.$or = [
         { title: { $regex: searchQuery as string, $options: "i" } },
@@ -236,6 +236,19 @@ const jobController = {
       message: "Recommended jobs fetched successfully",
       recommendedJobs: allJobs,
     });
+  }),
+  changeJobStatus: catchAsync(async (req: Request, res: Response) => {
+    const { status } = req.body;
+    const { jobId } = req.params;
+    const updatedJob = await Job.findByIdAndUpdate(
+      jobId,
+      { status },
+      { new: true }
+    );
+    if (!updatedJob) {
+      throw new AppError("No job found", 404);
+    }
+    return res.status(200).json({ message: "Successfully change job status" });
   }),
 };
 
