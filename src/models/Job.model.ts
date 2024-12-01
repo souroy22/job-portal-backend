@@ -8,15 +8,14 @@ export interface IJob extends Document {
   jobType: "Full-time" | "Part-time" | "Contract";
   salary?: number;
   requirements: string[];
-  responsibilities: string[];
   postedBy: Schema.Types.ObjectId;
-  createdAt: Date;
-  updatedAt: Date;
+  status: "open" | "closed";
 }
 
 const jobSchema = new Schema<IJob>(
   {
     title: { type: String, required: true },
+    status: { type: String, default: "open" },
     description: { type: String, required: true },
     company: { type: Schema.Types.ObjectId, ref: "Company", required: true },
     location: { type: String, required: true },
@@ -27,7 +26,6 @@ const jobSchema = new Schema<IJob>(
     },
     salary: { type: Number },
     requirements: { type: [String], required: true },
-    responsibilities: { type: [String], required: true },
     postedBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
   },
   { timestamps: true }

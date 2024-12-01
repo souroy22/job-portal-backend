@@ -4,7 +4,6 @@ export interface IApplication extends Document {
   jobId: Schema.Types.ObjectId;
   applicant: Schema.Types.ObjectId;
   status: "Applied" | "In Review" | "Shortlisted" | "Rejected" | "Accepted";
-  message?: string;
 }
 
 const applicationSchema = new Schema<IApplication>(
@@ -16,7 +15,6 @@ const applicationSchema = new Schema<IApplication>(
       enum: ["Applied", "In Review", "Shortlisted", "Rejected", "Accepted"],
       default: "Applied",
     },
-    message: { type: String },
   },
   { timestamps: true }
 );

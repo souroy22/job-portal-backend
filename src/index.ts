@@ -3,10 +3,12 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import cors from "cors";
+import bodyParser from "body-parser";
 import routers from "./routers";
 import { corsOptions } from "./configs/corsConfig";
 import connectDB from "./database/dbConfig";
-import { PaginationOptions } from "./utils/pagination";
+import { PaginationOptions } from "./utils/pagination.util";
+import errorHandler from "./middlewares/errorHandler.middleware";
 
 dotenv.config();
 const app = express();
@@ -35,6 +37,8 @@ app.get("/", (_: Request, res: Response) => {
 });
 
 app.use("/api/v1", routers);
+
+app.use(errorHandler);
 
 app.listen(parseInt(PORT, 10), `0.0.0.0`, () => {
   console.log(`Server is running on PORT: ${PORT}`);
