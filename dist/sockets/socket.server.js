@@ -11,6 +11,9 @@ const initializeSocket = (httpServer) => {
             origin: corsConfig_1.whitelist,
         },
     });
+    io.engine.on("initial_headers", (headers, req) => {
+        console.log("Initial headers:", headers);
+    });
     io.on("connection", (socket) => {
         console.log("User connected: ", socket.id);
         // Register the user as online
@@ -24,8 +27,8 @@ const initializeSocket = (httpServer) => {
             if (receiverSocketId) {
                 io.to(receiverSocketId).emit("receive-message", { sender, message });
             }
-            // Optional: Persist the message to the database
         });
+        socket.on("connect_error", (err) => console.error("Connection Error:", err));
         // Handle disconnection
         socket.on("disconnect", () => {
             onlineUsers.forEach((value, key) => {

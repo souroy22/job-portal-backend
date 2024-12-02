@@ -5,11 +5,12 @@ import morgan from "morgan";
 import cors from "cors";
 import http from "http";
 import routers from "./routers";
-import { corsOptions } from "./configs/corsConfig";
+import { corsOptions, whitelist } from "./configs/corsConfig";
 import connectDB from "./database/dbConfig";
 import { PaginationOptions } from "./utils/pagination.util";
 import errorHandler from "./middlewares/errorHandler.middleware";
-import { initializeSocket } from "./sockets/socket.server";
+import { initializeSocket } from "./sockets";
+import { Server } from "socket.io";
 
 dotenv.config();
 
@@ -49,7 +50,13 @@ app.use(errorHandler);
 
 // Create HTTP server and integrate with Socket.io
 const httpServer = http.createServer(app);
-initializeSocket(httpServer); // Initialize Socket.io with HTTP server
+const io = new Server(httpServer, {
+  cors: {
+    origin: whitelist,
+  },
+});
+
+initializeSocket(io);
 
 // Start the server
 httpServer.listen(parseInt(PORT, 10), "0.0.0.0", () => {
