@@ -13,7 +13,8 @@ const routers_1 = __importDefault(require("./routers"));
 const corsConfig_1 = require("./configs/corsConfig");
 const dbConfig_1 = __importDefault(require("./database/dbConfig"));
 const errorHandler_middleware_1 = __importDefault(require("./middlewares/errorHandler.middleware"));
-const socket_server_1 = require("./sockets/socket.server");
+const sockets_1 = require("./sockets");
+const socket_io_1 = require("socket.io");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || "8000";
@@ -34,7 +35,12 @@ app.use("/api/v1", routers_1.default);
 app.use(errorHandler_middleware_1.default);
 // Create HTTP server and integrate with Socket.io
 const httpServer = http_1.default.createServer(app);
-(0, socket_server_1.initializeSocket)(httpServer); // Initialize Socket.io with HTTP server
+const io = new socket_io_1.Server(httpServer, {
+    cors: {
+        origin: corsConfig_1.whitelist,
+    },
+});
+(0, sockets_1.initializeSocket)(io);
 // Start the server
 httpServer.listen(parseInt(PORT, 10), "0.0.0.0", () => {
     console.log(`Server is running on PORT: ${PORT}`);

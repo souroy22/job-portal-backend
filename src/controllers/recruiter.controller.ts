@@ -11,7 +11,6 @@ const recruiterController = {
   createProfile: catchAsync(async (req: Request, res: Response) => {
     const { file } = req;
     let { name, description, industry, website, location } = req.body;
-
     name = JSON.parse(name);
     description = JSON.parse(description);
     industry = JSON.parse(industry);
@@ -34,19 +33,22 @@ const recruiterController = {
       api_key: process.env.CLOUDINARY_API_KEY!,
       api_secret: process.env.CLOUDINARY_API_SECRET!,
     });
-
-    const uploadResult: any = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        { resource_type: "auto" },
-        (error, result) => {
-          if (error) {
-            return reject(error);
+    let url = "https://getdrawings.com/free-icon-bw/company-icon-png-13.png";
+    if (file) {
+      const uploadResult: any = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { resource_type: "auto" },
+          (error, result) => {
+            if (error) {
+              return reject(error);
+            }
+            resolve(result);
           }
-          resolve(result);
-        }
-      );
-      uploadStream.end(file.buffer);
-    });
+        );
+        uploadStream.end(file.buffer);
+      });
+      url = uploadResult.secure_url;
+    }
     let slug = slugify(name.slice(0, 15).trim(), { lower: true });
     const isExist = await Company.findOne({ slug });
     if (isExist) {
@@ -57,7 +59,7 @@ const recruiterController = {
     const newCompany = new Company({
       name,
       description,
-      logo: uploadResult.secure_url,
+      logo: url,
       industry,
       website,
       location,
