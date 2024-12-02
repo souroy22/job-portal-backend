@@ -8,6 +8,9 @@ import User from "../models/User.model";
 const jobSeekerController = {
   createProfile: catchAsync(async (req: Request, res: Response) => {
     const { file } = req;
+    if (!file) {
+      throw new AppError("Please add your resume", 400);
+    }
     let { skills, experience, education, preferences, expType } = req.body;
 
     skills = JSON.parse(skills);

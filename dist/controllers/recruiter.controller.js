@@ -43,15 +43,19 @@ const recruiterController = {
             api_key: process.env.CLOUDINARY_API_KEY,
             api_secret: process.env.CLOUDINARY_API_SECRET,
         });
-        const uploadResult = yield new Promise((resolve, reject) => {
-            const uploadStream = cloudinary_1.v2.uploader.upload_stream({ resource_type: "auto" }, (error, result) => {
-                if (error) {
-                    return reject(error);
-                }
-                resolve(result);
+        let url = "https://getdrawings.com/free-icon-bw/company-icon-png-13.png";
+        if (file) {
+            const uploadResult = yield new Promise((resolve, reject) => {
+                const uploadStream = cloudinary_1.v2.uploader.upload_stream({ resource_type: "auto" }, (error, result) => {
+                    if (error) {
+                        return reject(error);
+                    }
+                    resolve(result);
+                });
+                uploadStream.end(file.buffer);
             });
-            uploadStream.end(file.buffer);
-        });
+            url = uploadResult.secure_url;
+        }
         let slug = (0, slugify_1.default)(name.slice(0, 15).trim(), { lower: true });
         const isExist = yield Company_model_1.Company.findOne({ slug });
         if (isExist) {
@@ -62,7 +66,7 @@ const recruiterController = {
         const newCompany = new Company_model_1.Company({
             name,
             description,
-            logo: uploadResult.secure_url,
+            logo: url,
             industry,
             website,
             location,
